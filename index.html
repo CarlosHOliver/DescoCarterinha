@@ -4,6 +4,8 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Carteirinha de Estudante</title>
+  <!-- Font Awesome para ícone do LinkedIn -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -92,6 +94,25 @@
       border: none;
       cursor: pointer;
     }
+
+    footer {
+      margin-top: 40px;
+      text-align: center;
+      font-size: 14px;
+      color: #555;
+      max-width: 600px;
+    }
+    footer .linkedin {
+      font-size: 28px;
+      margin-top: 10px;
+      display: inline-block;
+      color: #0e76a8;
+      transition: transform 0.3s ease;
+    }
+    footer .linkedin:hover {
+      transform: scale(1.2);
+      color: #084c80;
+    }
   </style>
 </head>
 <body>
@@ -121,6 +142,17 @@
 
   <button id="exportar">Baixar Carteirinha</button>
 
+  <footer>
+    <p>
+      Criado por Carlos Henrique - Acadêmico do Curso de Engenharia da Computação<br>
+      Gerador apenas para fins educacionais, não é válido para meia-entrada. Para isso, procure uma carteirinha da UNE.
+    </p>
+    <a href="https://www.linkedin.com/in/carlosoliver/" target="_blank" class="linkedin">
+      <i class="fab fa-linkedin"></i>
+    </a>
+  </footer>
+
+  <!-- html2canvas -->
   <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
 
   <script>
