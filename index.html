@@ -1,1 +1,167 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Carteirinha de Estudante</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f0f2f5;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px;
+    }
+    h1 {
+      margin-bottom: 20px;
+    }
+    form {
+      background: white;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      width: 100%;
+      max-width: 500px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    input, button {
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-size: 16px;
+    }
+    .carteirinha {
+      margin-top: 30px;
+      background: #000;
+      color: #00e676;
+      padding: 20px;
+      border-radius: 16px;
+      width: 350px;
+      height: 200px;
+      display: none;
+      position: relative;
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: stretch;
+      box-shadow: 0 0 10px #000;
+    }
+    .foto-section {
+      width: 40%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
+      padding: 5px 0;
+    }
+    .foto-section img#preview {
+      width: 80px;
+      height: 100px;
+      object-fit: cover;
+      background: white;
+      border-radius: 4px;
+    }
+    .foto-section .logo {
+      width: 40px;
+      height: 40px;
+      margin-top: 8px;
+    }
+    .dados {
+      width: 58%;
+      font-size: 13px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    .dados div {
+      margin: 2px 0;
+    }
+    .label {
+      color: #ccc;
+      font-size: 12px;
+    }
+    #exportar {
+      display: none;
+      margin-top: 15px;
+      background: #00e676;
+      color: #000;
+      font-weight: bold;
+      border: none;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <h1>Gerador de Carteirinha</h1>
+  <form id="form">
+    <input type="text" id="nome" placeholder="Nome completo" required />
+    <input type="text" id="rg" placeholder="RG" required />
+    <input type="text" id="matricula" placeholder="Matrícula" required />
+    <input type="text" id="curso" placeholder="Curso" required />
+    <input type="month" id="ingresso" required />
+    <input type="file" id="foto" accept="image/*" required />
+    <button type="submit">Gerar Carteirinha</button>
+  </form>
 
+  <div class="carteirinha" id="carteirinha">
+    <div class="foto-section">
+      <img id="preview" />
+      <img src="https://i.imgur.com/PTIgd9k.png" alt="logo" class="logo">
+    </div>
+    <div class="dados">
+      <div><span class="label">Nome</span><br><strong id="outNome"></strong></div>
+      <div><span class="label">RG</span> <span style="float:right" class="label">Matrícula</span><br><strong id="outRG"></strong> <span style="float:right" id="outMatricula"></span></div>
+      <div><span class="label">Curso</span><br><strong id="outCurso"></strong></div>
+      <div><span class="label">Ingresso</span> <span style="float:right" class="label">Validade</span><br><strong id="outIngresso"></strong> <span style="float:right" id="outValidade"></span></div>
+    </div>
+  </div>
+
+  <button id="exportar">Baixar Carteirinha</button>
+
+  <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+
+  <script>
+    const form = document.getElementById('form');
+    const carteirinha = document.getElementById('carteirinha');
+    const exportarBtn = document.getElementById('exportar');
+
+    form.addEventListener('submit', function(e) {
+      e.preventDefault();
+
+      document.getElementById('outNome').textContent = document.getElementById('nome').value;
+      document.getElementById('outRG').textContent = document.getElementById('rg').value;
+      document.getElementById('outMatricula').textContent = document.getElementById('matricula').value;
+      document.getElementById('outCurso').textContent = document.getElementById('curso').value;
+
+      const ingresso = document.getElementById('ingresso').value;
+      const [ano, mes] = ingresso.split("-");
+      document.getElementById('outIngresso').textContent = `${mes}/${ano}`;
+
+      const hoje = new Date();
+      const anoValidade = (hoje.getMonth() + 1 > 3) ? hoje.getFullYear() + 1 : hoje.getFullYear();
+      document.getElementById('outValidade').textContent = `Março/${anoValidade}`;
+
+      const file = document.getElementById('foto').files[0];
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        document.getElementById('preview').src = e.target.result;
+        carteirinha.style.display = 'flex';
+        exportarBtn.style.display = 'inline-block';
+      };
+      reader.readAsDataURL(file);
+    });
+
+    exportarBtn.addEventListener('click', () => {
+      html2canvas(document.getElementById('carteirinha')).then(canvas => {
+        const link = document.createElement('a');
+        link.download = 'carteirinha.png';
+        link.href = canvas.toDataURL();
+        link.click();
+      });
+    });
+  </script>
+</body>
+</html>
